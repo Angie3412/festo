@@ -70,9 +70,8 @@ Route::resource('/users', UserController::class);
 Route::get('/posts', [HerramientaController::class, 'handlePost'])->name('posts.index');
 Route::post('/posts', [HerramientaController::class, 'handlePost'])->name('posts.store');
 Route::delete('/posts/{id}', [HerramientaController::class, 'handlePost'])->name('posts.destroy');
+Route::post('/posts/{post}/stock/{action}', [HerramientaController::class, 'adjustarStock'])->name('posts.adjustarStock');
 
-
-Route::get('/post2', Post::class );
 /*Route::get('/solicitudes', function () {
     return view('solicitudes');
 })->name('solicitudes.create');

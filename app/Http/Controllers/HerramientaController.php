@@ -41,7 +41,7 @@ class HerramientaController extends Controller
     public function create()
     {
         $user = Auth::user();
-        $categorias = Categoria::all(); 
+        $categorias = Categoria::all();
         return view('herramientas.create', compact('categorias'));
 
     }
@@ -101,7 +101,7 @@ class HerramientaController extends Controller
         $herramientaEditar = Herramienta::findOrFail($id);
         $categorias = Categoria::all();
         return view('herramientas.edit', [
-            'herramientaEditar' => $herramientaEditar, 
+            'herramientaEditar' => $herramientaEditar,
             'categorias' => $categorias
         ]);
     }
@@ -124,7 +124,7 @@ class HerramientaController extends Controller
         $editarherramienta -> stock = $request -> get('stockEdit');
         $editarherramienta -> categoria = $request -> get('categoriaEdit');
 
-        
+
         if ($request->hasFile('imagen')) {
             if ($editarherramienta->imagen) {
                 $rutaImagenActual = public_path('imagenes/herramientas/' . $editarherramienta->imagen);
@@ -132,12 +132,12 @@ class HerramientaController extends Controller
                     unlink($rutaImagenActual);
                 }
             }
-    
+
             $imagen = $request->file('imagen');
             $nombreimg = time() . '.' . $imagen->getClientOriginalExtension();
             $destino = public_path('imagenes/herramientas');
             $imagen->move($destino, $nombreimg);
-    
+
             $editarherramienta->imagen = $nombreimg;
         }
         if ($request->hasFile('imagencode')) {
@@ -147,12 +147,12 @@ class HerramientaController extends Controller
                     unlink($rutaImagenActualCode);
                 }
             }
-    
+
             $imagencode = $request->file('imagencode');
             $nombreimgcode = time() . '.' . $imagencode->getClientOriginalExtension();
             $destinocode = public_path('imagenes/codeb');
             $imagencode->move($destinocode, $nombreimgcode);
-    
+
             $editarherramienta->imagencode = $nombreimgcode;
         }
 
@@ -177,7 +177,7 @@ class HerramientaController extends Controller
         // Si es una solicitud GET, mostramos todos los posts.
         if ($request->isMethod('get')) {
             $posts = Herramienta::all();
-            
+
             return view('posts.index', compact('posts'));
         }
 
@@ -210,5 +210,16 @@ class HerramientaController extends Controller
 
         return redirect()->route('posts.index')->with('error', 'Acción no permitida');
     }
-    
+
+    public function adjustarStock(Herramienta $post, $action)
+    {
+        if ($action == 'increase') {
+            $post->stock++;
+        } elseif ($action == 'decrease' && $post->stock > 0) {
+            $post->stock--;
+        }
+        $post->save();
+
+        return redirect()->back();
+    }
 }
