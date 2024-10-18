@@ -19,6 +19,34 @@
 
     <!-- Scripts -->
     @vite(['resources/js/app.js'])
+
+    <style>
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        td, th {
+            word-wrap: break-word;
+            padding: 12px;
+        }
+
+        th, td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: top;
+        }
+
+        .acciones-col {
+            width: 120px;
+            text-align: center;
+        }
+
+        .acciones-col form {
+            display: inline-block;
+        }
+    </style>
+
 </head>
 <body class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen bg-gradient-to-r from-blue-100 to-purple-200">
@@ -41,7 +69,7 @@
                                 <th class="px-4 py-4">Imagen</th>
                                 <th class="px-4 py-4">Códigos de Barras</th>
                                 <th class="px-4 py-4">Estado</th>
-                                <th class="px-4 py-4">Acciones</th>
+                                <th class="px-4 py-4 acciones-col">Acciones</th> <!-- Columna de acciones con clase fija -->
                             </tr>
                         </thead>
                         <tbody id="postsTable" class="divide-y divide-gray-200">
@@ -55,7 +83,7 @@
                                 <td class="px-4 py-4"><img src="{{ asset('storage/images/' . $post->imagen) }}" alt="Imagen del post" class="w-12 h-12 rounded-md"></td>
                                 <td class="px-4 py-4">{{ $post->imagencode }}</td>
                                 <td class="px-4 py-4">{{ $post->estado }}</td>
-                                <td class="border px-4 py-4 flex space-x-2">
+                                <td class="px-4 py-4 acciones-col flex space-x-2">
                                     <!-- Botón para disminuir stock -->
                                     <form action="{{ route('posts.adjustarStock', ['post' => $post->id, 'action' => 'decrease']) }}" method="POST" title="Sustraer Stock">
                                         @csrf
@@ -81,11 +109,11 @@
                                         </button>
                                     </form>
                                 </td>
-
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </main>
