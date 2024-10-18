@@ -11,55 +11,107 @@
     <!-- Tailwind CSS -->
     @vite('resources/css/app.css')
 
-    <!-- Font Awesome para los íconos -->
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <!-- Tu archivo CSS personalizado -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
     <!-- Scripts -->
     @vite(['resources/js/app.js'])
 
     <style>
+        /* Estilos básicos para la tabla */
         table {
             table-layout: fixed;
             width: 100%;
         }
 
-        td, th {
-            word-wrap: break-word;
-            padding: 12px;
-        }
-
         th, td {
-            overflow: hidden;
-            text-overflow: ellipsis;
+            padding: 12px;
+            word-wrap: break-word;
             vertical-align: top;
         }
 
-        .acciones-col {
-            width: 120px;
-            text-align: center;
+        /* Aseguramos que las columnas no se sobrepongan */
+        th, td {
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
+        /* Estilo para la columna de acciones */
+        .acciones-col {
+            width: 100px; /* Ancho fijo para la columna de acciones */
+            min-width: 100px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* Aseguramos que las acciones estén en una sola línea */
         .acciones-col form {
             display: inline-block;
         }
-    </style>
 
+        /* Estilo para botones de acciones */
+        .acciones-col button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .acciones-col i {
+            transition: color 0.2s;
+        }
+
+        .acciones-col i:hover {
+            color: #1e40af; /* Cambiar color al hacer hover */
+        }
+
+        /* Fondo y diseño del cuerpo */
+        body {
+            font-family: 'Figtree', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        /* Mejoras en el diseño de la tabla */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .table thead {
+            background-color: #3b82f6;
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+    </style>
 </head>
-<body class="font-sans antialiased bg-gray-50">
-    <div class="min-h-screen bg-gradient-to-r from-blue-100 to-purple-200">
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Navegación -->
         @include('layouts.navigation')
 
-        <!-- Page Content -->
-        <main>
-            <div class="container mx-auto p-6">
-
-                <!-- Tabla -->
-                <div class="mt-10 overflow-hidden rounded-lg shadow-lg mx-auto w-full max-w-4xl bg-white">
-                    <table class="table-auto w-full text-left bg-gray-50">
-                        <thead class="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+        <!-- Contenido de la página -->
+        <main class="container mx-auto">
+            <div class="table-container">
+                <div class="table w-full max-w-4xl mx-auto">
+                    <table class="table-auto w-full text-left">
+                        <thead>
                             <tr>
                                 <th class="px-4 py-4">Código</th>
                                 <th class="px-4 py-4">Nombre</th>
@@ -69,7 +121,7 @@
                                 <th class="px-4 py-4">Imagen</th>
                                 <th class="px-4 py-4">Códigos de Barras</th>
                                 <th class="px-4 py-4">Estado</th>
-                                <th class="px-4 py-4 acciones-col">Acciones</th> <!-- Columna de acciones con clase fija -->
+                                <th class="px-4 py-4 acciones-col">Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="postsTable" class="divide-y divide-gray-200">
@@ -80,11 +132,13 @@
                                 <td class="px-4 py-4">{{ Str::limit($post->descripcion, 50) }}</td>
                                 <td class="px-4 py-4">{{ $post->stock }}</td>
                                 <td class="px-4 py-4">{{ $post->categoria }}</td>
-                                <td class="px-4 py-4"><img src="{{ asset('storage/images/' . $post->imagen) }}" alt="Imagen del post" class="w-12 h-12 rounded-md"></td>
+                                <td class="px-4 py-4">
+                                    <img src="{{ asset('storage/images/' . $post->imagen) }}" alt="Imagen del post" class="w-12 h-12 rounded-md">
+                                </td>
                                 <td class="px-4 py-4">{{ $post->imagencode }}</td>
                                 <td class="px-4 py-4">{{ $post->estado }}</td>
-                                <td class="px-4 py-4 acciones-col flex space-x-2">
-                                    <!-- Botón para disminuir stock -->
+                                <td class="px-4 py-4 acciones-col">
+                                    <!-- Formulario para disminuir stock -->
                                     <form action="{{ route('posts.adjustarStock', ['post' => $post->id, 'action' => 'decrease']) }}" method="POST" title="Sustraer Stock">
                                         @csrf
                                         <button type="submit" class="text-yellow-600 hover:text-yellow-800">
@@ -92,7 +146,7 @@
                                         </button>
                                     </form>
 
-                                    <!-- Botón para aumentar stock -->
+                                    <!-- Formulario para aumentar stock -->
                                     <form action="{{ route('posts.adjustarStock', ['post' => $post->id, 'action' => 'increase']) }}" method="POST" title="Sumar Stock">
                                         @csrf
                                         <button type="submit" class="text-green-600 hover:text-green-800">
@@ -100,7 +154,7 @@
                                         </button>
                                     </form>
 
-                                    <!-- Botón para eliminar -->
+                                    <!-- Formulario para eliminar -->
                                     <form action="{{ route('posts.destroy', $post->id) }}" method="POST" title="Eliminar">
                                         @csrf
                                         @method('DELETE')
@@ -113,16 +167,14 @@
                             @endforeach
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Scripts para manejar el modal y ajustar el stock -->
+    <!-- Script para ajustar el stock mediante AJAX (si se desea) -->
     <script>
         function adjustStock(postId, action) {
-            // Aquí se puede hacer una solicitud AJAX para actualizar el stock
             const url = `/posts/${postId}/stock/${action}`;
             fetch(url, {
                 method: 'POST',
