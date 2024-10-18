@@ -133,9 +133,9 @@
                                 <td class="px-4 py-4">{{ $post->stock }}</td>
                                 <td class="px-4 py-4">{{ $post->categoria }}</td>
                                 <td class="px-4 py-4">
-                                    <img src="{{ asset('storage/images/' . $post->imagen) }}" alt="Imagen del post" class="w-12 h-12 rounded-md">
+                                    <img src="https://www.beta-tools.com/media/catalog/product/cache/6/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/1/9/1972_slash_k20v-13bmc_foto_01.jpg" alt="Imagen del post" class="w-12 h-12 rounded-md">
                                 </td>
-                                <td class="px-4 py-4">{{ $post->imagencode }}</td>
+                                <td class="px-4 py-4"><img src="https://upload.wikimedia.org/wikipedia/commons/8/84/EAN13.svg" alt="Imagen del post" class="w-12 h-12 rounded-md"></td>
                                 <td class="px-4 py-4">{{ $post->estado }}</td>
                                 <td class="px-4 py-4 acciones-col">
                                     <!-- Formulario para disminuir stock -->
